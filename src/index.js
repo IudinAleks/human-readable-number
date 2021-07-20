@@ -1,6 +1,6 @@
 module.exports = function toReadable(number) {
     //Список письменных обозначений цифр
-    let wordNumbArr = {
+    let numberToWordArr = {
         0: "",
         1: "one",
         2: "two",
@@ -31,31 +31,32 @@ module.exports = function toReadable(number) {
         90: "ninety",
     };
 
-    function toText(number) {
-        if (number === 0) return "";
-        return toHundred(number);
-    }
-
-    function toHundred(numbers) {
-        if (number > 99)
+    // Функция преобразованя чисел > 99 в письменный вид
+    function toHundred(number) {
+        if (number > 99 && number % 100 !== 0) {
             return (
-                wordNumbArr[Math.floor(number / 100)] +
+                numberToWordArr[Math.floor(number / 100)] +
                 " hundred " +
                 toTens(number % 100)
             );
+        } else if (number > 99 && number % 100 === 0)
+            return numberToWordArr[Math.floor(number / 100)] + " hundred";
         return toTens(number);
     }
 
+    // Функция преобразованя чисел < 100 в письменный вид
     function toTens(number) {
-        if (number < 20) {
-            return wordNumbArr[number];
+        if (number === 0) return "zero";
+        if (number < 20 || number % 10 === 0) {
+            return numberToWordArr[number];
         } else {
             return (
-                wordNumbArr[Math.floor(number / 10) * 10] +
+                numberToWordArr[Math.floor(number / 10) * 10] +
                 " " +
-                wordNumbArr[number % 10]
+                numberToWordArr[number % 10]
             );
         }
     }
-    return toText(number);
+
+    return toHundred(number);
 };
